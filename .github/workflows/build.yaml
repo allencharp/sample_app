@@ -16,7 +16,7 @@ jobs:
           sudo gem install brakeman -v 5.2.3
       - name: brakeman 
         run: |
-          brakeman -f sarif -o results.sonar || exit 0
+          brakeman -A -o results.sonar || exit 0
 
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
