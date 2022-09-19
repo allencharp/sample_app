@@ -1,17 +1,25 @@
-name: Build 
-on:
-  push:
-    branches:
-      - master # or the name of your main branch
+name: Build
+on: [pull_request]
+
 jobs:
   build:
-    name: Build 
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: sonarsource/sonarqube-scan-action@master
+      - name: Install brakeman
+        run: |
+          sudo gem install brakeman -v 5.2.3
+      - name: brakeman 
+        run: |
+          brakeman -A -o results.sonar || exit 0
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        with:
+          args: >
+            -Dsonar.externalIssuesReportPaths=results.sonar  
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
