@@ -11,7 +11,7 @@ jobs:
           fetch-depth: 0
       - name: Install brakeman
         run: |
-          sudo gem install brakeman -v 5.2.3
+          sudo gem install brakeman -v 5.3.0
       - name: brakeman 
         run: |
           brakeman -A -o results.sonar || exit 0
