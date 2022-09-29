@@ -5,7 +5,7 @@
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
 
-SampleApp::Application.config.secret_key = 'hello'
+SampleApp::Application.config.password = 'hello'
 
 
 
