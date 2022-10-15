@@ -16,7 +16,7 @@ jobs:
           ruby-version: '3.0'
       - name: Run rubocop
         run: |
-          bundle exec 
+          bundle exec rubocop
           rubocop -f json -o output.json
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
