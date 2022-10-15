@@ -15,7 +15,7 @@ jobs:
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.0
+        ruby-version: 2.6
 
     # This step is not necessary if you add the gem to your Gemfile
     - name: Install Code Scanning integration
@@ -27,14 +27,6 @@ jobs:
     - name: RuboCop run
       run: |
         bash -c "
-          rubocop -f json -o output.json
+          bundle exec rubocop --require code_scanning --format CodeScanning::SarifFormatter -o rubocop.sarif
           [[ $? -ne 2 ]]
         "
-    - name: SonarQube Scan
-      uses: sonarsource/sonarqube-scan-action@master
-      with:
-        args: >
-          -Dsonar.externalIssuesReportPaths=results.sonar  
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
