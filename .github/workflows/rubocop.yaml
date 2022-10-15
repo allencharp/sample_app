@@ -10,9 +10,10 @@ jobs:
 
     steps:
       - name: Set up Ruby
-        uses: ruby/setup-ruby@v2
+        uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+          ruby-version: '3.0'
       - name: Run rubocop
         run: |
           bundle exec rubocop -f json -o output.json
