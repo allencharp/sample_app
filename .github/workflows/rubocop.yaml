@@ -1,28 +1,40 @@
-name: Rubocop
+name: "RuboCop"
 
-on: 
-  push:
-    branches:
-      - master
+on: [push]
+
 jobs:
   rubocop:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
 
     steps:
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-          ruby-version: '3.0'
-      - name: Run rubocop
-        run: |
-          bundle exec rubocop
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.6
+
+    # This step is not necessary if you add the gem to your Gemfile
+    - name: Install Code Scanning integration
+      run: bundle add code-scanning-rubocop --skip-install
+
+    - name: Install dependencies
+      run: bundle install
+
+    - name: RuboCop run
+      run: |
+        bash -c "
           rubocop -f json -o output.json
-      - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@master
-        with:
-          args: >
-            -Dsonar.externalIssuesReportPaths=output.json
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          [[ $? -ne 2 ]]
+        "
+    - name: SonarQube Scan
+      uses: sonarsource/sonarqube-scan-action@master
+      with:
+        args: >
+          -Dsonar.externalIssuesReportPaths=results.sonar  
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
