@@ -9,10 +9,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Install brakeman
+      - name: Install rubocop
         run: |
           sudo apt-get install -y rubocop
-      - name: brakeman 
+      - name: rubocop 
         run: |
           rubocop -f json -o output.json || exit 0
       - name: SonarQube Scan
