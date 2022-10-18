@@ -11,8 +11,7 @@ jobs:
           fetch-depth: 0
       - name: Install brakeman
         run: |
-          sudo gem install rubocob
-          sudo gem install rubocob-rails
+          sudo apt-get install -y rubocop
       - name: brakeman 
         run: |
           rubocop -f json -o output.json || exit 0
